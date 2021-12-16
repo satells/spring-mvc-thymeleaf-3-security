@@ -9,15 +9,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/", "/home", "/webjars/**", "/css/**", "/js/**", "/image/**").permitAll()
 
-				.anyRequest().authenticated()
+		// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+		http.authorizeRequests()
+
+				.antMatchers("/", "/home", "/webjars/**", "/css/**", "/js/**", "/image/**")
+
+				.permitAll()
+
+				.anyRequest()
+
+				.authenticated()
 
 				.and()
 
-				.formLogin().loginPage("/login").defaultSuccessUrl("/", true).failureUrl("/login-error").permitAll().
+				// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+				.formLogin()
 
-				and().logout().logoutSuccessUrl("/");
+				.loginPage("/login")
+
+				.defaultSuccessUrl("/", true)
+
+				.failureUrl("/login-error")
+
+				.permitAll()
+
+				// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+				.and()
+
+				.logout()
+
+				.logoutSuccessUrl("/");
 	}
 
 }
