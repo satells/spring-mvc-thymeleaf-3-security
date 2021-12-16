@@ -29,7 +29,12 @@ CREATE TABLE usuarios (
 	codigo_verificador 	varchar(6) default null,
 	PRIMARY KEY 		(id),
 	UNIQUE			(email)
+	
 );
+CREATE INDEX idx_usuario_email ON usuarios (email);
+
+
+
 /*-----------------------------------------------------------------------------------------------------*/
 CREATE TABLE usuarios_tem_perfis (
 	usuario_id 	bigint not null,
@@ -48,6 +53,7 @@ CREATE TABLE especialidades (
 	PRIMARY KEY	(id),
 	UNIQUE		(titulo)
 );
+CREATE INDEX idx_especialidade_titulo ON especialidades (titulo);
 /*-----------------------------------------------------------------------------------------------------*/
 CREATE TABLE medicos (
 	id		bigserial not null,
@@ -87,6 +93,10 @@ CREATE TABLE horas (
 	PRIMARY KEY	(id),
 	UNIQUE		(hora_minuto)
 );
+
+CREATE INDEX idx_hora_minuto ON horas (hora_minuto);
+
+
 /*-----------------------------------------------------------------------------------------------------*/
 CREATE TABLE agendamentos (
 	id			bigserial not null,
