@@ -120,6 +120,14 @@ INSERT INTO perfis (id,descricao) VALUES (1,'ADMIN'),(2,'MEDICO'),(3,'PACIENTE')
 INSERT INTO horas (id, hora_minuto) VALUES (1,'07:00:00'),(2,'07:30:00'),(3,'08:00:00'),(4,'08:30:00'),(5,'09:00:00'),(6,'09:30:00'),(7,'10:00:00'),(8,'10:30:00'),(9,'11:00:00'),(10,'11:30:00'),(11,'13:00:00'),(12,'13:30:00'),(13,'14:00:00'),(14,'14:30:00'),(15,'15:00:00'),(16,'15:30:00'),(17,'16:00:00'),(18,'16:30:00'),(19,'17:00:00'),(20,'17:30:00');
 
 
+INSERT INTO usuarios (ativo, email, senha) VALUES (true, 'msergiost@hotmail.com', '$2a$10$GNDvn3lJHD4n6Z5YK3JoGeniH7bxshFzyxMXrxLbHPQ52ifZC7dUS');
+
+INSERT INTO usuarios_tem_perfis (usuario_id, perfil_id) VALUES (1,1);
+
+
+
+
+
 
 
 
