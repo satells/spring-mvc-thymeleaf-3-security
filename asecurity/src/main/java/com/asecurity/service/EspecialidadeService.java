@@ -32,7 +32,7 @@ public class EspecialidadeService {
 	public Map<String, Object> buscarEspecialidades(HttpServletRequest request) {
 		datatables.setRequest(request);
 		datatables.setColunas(DatatablesColunas.ESPECIALIDADES);
-		Page<?> page = datatables.getSearch().isEmpty() ? repository.findAll(datatables.getPageable())
+		Page<Especialidade> page = datatables.getSearch().isEmpty() ? repository.findAll(datatables.getPageable())
 				: repository.findAllByTitulo(datatables.getSearch(), datatables.getPageable());
 
 		return datatables.getResponse(page);
