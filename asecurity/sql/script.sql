@@ -125,6 +125,25 @@ INSERT INTO usuarios (ativo, email, senha) VALUES (true, 'msergiost@hotmail.com'
 INSERT INTO usuarios_tem_perfis (usuario_id, perfil_id) VALUES (1,1);
 
 
+insert into especialidades (titulo, descricao) values 
+('Alergia e Imunologia','Diagnóstico e tratamento das doenças alérgicas e do sistema imunológico'),
+('Anestesiologia','Área da Medicina que envolve o tratamento da dor, a hipnose e o manejo intensivo do paciente sob intervenção cirúrgica ou procedimentos'),
+('Angiologia','É a área da medicina que estuda o tratamento das doenças do aparelho circulatório'),
+('Cardiologia','Aborda as doenças relacionadas com o coração e sistema vascular'),
+('Cirurgia Cardiovascular','Tratamento cirúrgico de doenças do coração'),
+('Cirurgia da Mão','Cuida das doenças das mãos e dos punhos, incluindo os ossos, articulações, tendões, músculos, nervos, vasos e pele'),
+('Cirurgia de cabeça e pescoço','Tratamento cirúrgico de doenças da cabeça e do pescoço'),
+('Cirurgia do Aparelho Digestivo','Tratamento clínico e cirúrgico dos órgãos do aparelho digestório, como o esôfago, estômago, intestinos, fígado e vias biliares, e pâncreas'),
+('Cirurgia Geral','É a área que engloba todas as áreas cirúrgicas, sendo também subdividida'),
+('Cirurgia Pediátrica','Cirurgia geral em crianças'),
+('Cirurgia Plástica','Correção das deformidades, malformações ou lesões que comprometem funções dos órgãos através de cirurgia de caráter reparador ou cirurgias estéticas'),
+('Cirurgia Torácica','Atua na cirurgia da caixa torácica e vias aéreas'),
+('Cirurgia Vascular','Tratamento das veias e artérias, através de cirurgia, procedimentos endovasculares ou tratamentos clínicos'),
+('Clínica Médica (Medicina interna)','É a área que engloba todas as áreas não cirúrgicas, sendo subdividida em várias outras especialidades'),
+('Coloproctologia','É a parte da medicina que estuda e trata os problemas do intestino grosso (cólon), sigmoide e doenças do reto, canal anal e ânus'),
+('Dermatologia','É o estudo da pele anexos (pelos, glândulas), tratamento e prevenção das doenças'),
+('Endocrinologia e Metabologia','É a área da Medicina responsável pelo cuidados aos hormônios, crescimento e glândulas como adrenal, tireoide, hipófise, pâncreas endócrino e outros'),
+('Endoscopia','Endoscopia: Esta especialidade médica ocupa-se do estudo dos mecanismo fisiopatológicos, diagnóstico e tratamento de enfermidades passíveis de abordagem por procedimentos endoscópicos e minimamente invasivos');
 
 
 
