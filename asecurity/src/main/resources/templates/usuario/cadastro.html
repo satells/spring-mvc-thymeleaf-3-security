@@ -43,6 +43,7 @@
 								</div>
 							</div>
 							
+							
 							<div class="mb-3">
 								<label for="senha">Senha</label> 
 								<input type="password" class="form-control" id="senha" maxlength="6"
@@ -59,6 +60,7 @@
 									<option value="3">Paciente</option>
 								</select>
 
+								<input type="hidden" value="0" name="perfis"/>
 								<div class="invalid-feedback">Pelo menos um perfil é requerido.</div>
 							</div>
 							
@@ -91,6 +93,14 @@
 
 	</section>
 	<script	th:src="~{}" th:fragment="js"></script>
-	<script th:inline="javascript" th:fragment="inlinescript"></script>
+	<script th:inline="javascript" th:fragment="inlinescript">
+	
+	$('#perfis').ready(function(){
+		var perfis = [[${usuario.perfis}]];
+		$.each(perfis, function(k, v) {
+			$('#perfis option[value="'+ v.id +'"]').attr('selected', 'selected');
+		})
+	});
+	</script>
 </body>
 </html>
