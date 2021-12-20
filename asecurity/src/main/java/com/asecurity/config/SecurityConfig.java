@@ -7,10 +7,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.asecurity.domain.PerfilTipo;
 import com.asecurity.service.UsuarioService;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+	private static final String ADMIN = PerfilTipo.ADMIN.getDesc();
+	private static final String MEDICO = PerfilTipo.MEDICO.getDesc();
+	private static final String PACIENTE = PerfilTipo.PACIENTE.getDesc();
 
 	@Autowired
 	private UsuarioService usuarioService;
@@ -27,10 +32,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 
 				// Acessos privados admin
-				.antMatchers("/u/**").hasAuthority("ADMIN")
+				.antMatchers("/u/**").hasAuthority(ADMIN)
+
+				// Acessos privados admin
+				.antMatchers("/especialidades/**").hasAuthority(ADMIN)
+
+				// Acessos privados pacientes
+				.antMatchers("/pacientes/**").hasAuthority(PACIENTE)
 
 				// Acessos privados médicos
-				.antMatchers("/medicos/**").hasAuthority("MEDICO")
+				.antMatchers("/medicos/dados", "/medicos/salvar", "/medicos/editar").hasAnyAuthority(MEDICO, ADMIN)
+
+				.antMatchers("/medicos/**").hasAuthority(MEDICO)
 
 				.anyRequest()
 
