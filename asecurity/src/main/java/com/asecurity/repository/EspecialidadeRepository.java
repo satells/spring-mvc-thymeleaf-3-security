@@ -1,6 +1,7 @@
 package com.asecurity.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,5 +18,8 @@ public interface EspecialidadeRepository extends JpaRepository<Especialidade, Lo
 
 	@Query("select e.titulo from Especialidade e where e.titulo like :termo%")
 	List<String> findEspecialidadesByTermo(String termo);
+
+	@Query("select e from Especialidade e where e.titulo in :titulos")
+	Set<Especialidade> findByTitulos(String[] titulos);
 
 }

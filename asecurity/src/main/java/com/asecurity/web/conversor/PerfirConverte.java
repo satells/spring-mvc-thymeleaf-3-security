@@ -22,7 +22,5 @@ public class PerfirConverte implements Converter<String[], List<Perfil>> {
 		}
 
 		return perfis;
-
 	}
-
 }

@@ -33,7 +33,7 @@ public class MedicoService {
 		m2.setNome(medico.getNome());
 		m2.getUsuario();
 
-		if (!m2.getEspecialidades().isEmpty()) {
+		if (!medico.getEspecialidades().isEmpty()) {
 			m2.getEspecialidades().addAll(medico.getEspecialidades());
 		}
 	}

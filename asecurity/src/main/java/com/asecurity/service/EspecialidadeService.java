@@ -2,6 +2,7 @@ package com.asecurity.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -54,5 +55,9 @@ public class EspecialidadeService {
 	public List<String> buscarEspecialidadeByTermo(String termo) {
 
 		return repository.findEspecialidadesByTermo(termo);
+	}
+
+	public Set<Especialidade> buscaPorTitulos(String[] titulos) {
+		return repository.findByTitulos(titulos);
 	}
 }
