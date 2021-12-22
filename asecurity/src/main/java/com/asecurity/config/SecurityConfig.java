@@ -32,6 +32,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				.permitAll()
 
 				// Acessos privados admin
+				.antMatchers("/u/editar/senha", "/u/confirmar/senha").hasAuthority(MEDICO)
+
 				.antMatchers("/u/**").hasAuthority(ADMIN)
 
 				// Acessos privados admin

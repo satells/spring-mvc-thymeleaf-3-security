@@ -61,3 +61,21 @@ $(document).ready(function() {
     } );		
 	
 });	
+
+$('.pass').keyup(function(){
+	console.log('fdsafda');
+	$('#senha1').val() === $('#senha2').val() 
+		? $('#senha3').removeAttr('readonly') 
+		: $('#senha3').attr('readonly', 'readyonly');
+});
+
+
+
+
+
+
+
+
+
+
+
