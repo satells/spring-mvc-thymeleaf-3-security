@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -68,8 +69,10 @@ public class EspecialidadeController {
 
 	@GetMapping("/datatables/server/medico/{id}")
 	public ResponseEntity<?> getEspecialidadesPorMedico(@PathVariable("id") Long id, HttpServletRequest request) {
+		System.out.println("new response entity");
 
-		return ResponseEntity.ok(service.buscarEspecialidadesPorMedico(id, request));
+		return new ResponseEntity<>(service.buscarEspecialidadesPorMedico(id, request), HttpStatus.OK);
+//		return ResponseEntity.ok(service.buscarEspecialidadesPorMedico(id, request));
 	}
 
 }
