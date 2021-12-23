@@ -3,6 +3,7 @@ package com.asecurity.web.controller;
 import java.security.Principal;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -84,4 +85,9 @@ public class MedicoController {
 		return "redirect:/medicos/dados";
 	}
 
+	@GetMapping("/especialidade/titulo/{titulo}")
+	public ResponseEntity<?> getMedicosPorEspecialidade(@PathVariable String titulo) {
+
+		return ResponseEntity.ok(medicoService.buscarMedicosPorEspecialidade(titulo));
+	}
 }
