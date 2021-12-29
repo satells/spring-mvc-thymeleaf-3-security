@@ -2,11 +2,14 @@ package com.asecurity.web.controller;
 
 import java.time.LocalDate;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.asecurity.domain.Agendamento;
+import com.asecurity.domain.Especialidade;
 import com.asecurity.domain.Paciente;
+import com.asecurity.domain.PerfilTipo;
 import com.asecurity.service.AgendamentoService;
 import com.asecurity.service.EspecialidadeService;
 import com.asecurity.service.PacienteSevice;
@@ -49,15 +54,42 @@ public class AgendamentoController {
 
 	@PostMapping("/salvar")
 	public String salvar(Agendamento agendamento, RedirectAttributes attr, @AuthenticationPrincipal User user) {
-		agendamentoService.salvar(agendamento);
 
 		Paciente paciente = pacienteService.buscarPorUsuarioEmail(user.getUsername());
 
 		String titulo = agendamento.getEspecialidade().getTitulo();
 
-//		especialidadeService.
+		Especialidade especialidade = especialidadeService.buscaPorTitulos(new String[] { titulo }).stream().findFirst().get();
+		agendamento.setEspecialidade(especialidade);
+		agendamento.setPaciente(paciente);
 
-		return "redirect:/agendamento/agendar";
+		agendamentoService.salvar(agendamento);
+
+		attr.addFlashAttribute("sucesso", "Agendamento gravado com sucesso.");
+
+		return "redirect:/agendamentos/agendar";
+	}
+
+	@GetMapping({ "/historico/paciente", "/historico/consultas" })
+	public String historico() {
+
+		return "agendamento/historico-paciente";
+
+	}
+
+	@GetMapping("/datatables/server/historico")
+	public ResponseEntity<?> historicoAgendamentosPorPaciente(HttpServletRequest request, @AuthenticationPrincipal User user) {
+		if (user.getAuthorities().contains(new SimpleGrantedAuthority(PerfilTipo.PACIENTE.getDesc()))) {
+
+			return ResponseEntity.ok(agendamentoService.buscarHistoricoPorPacienteEmail(user.getUsername(), request));
+		}
+		if (user.getAuthorities().contains(new SimpleGrantedAuthority(PerfilTipo.MEDICO.getDesc()))) {
+			return ResponseEntity.ok(agendamentoService.buscarHistoricoPorMedicoEmail(user.getUsername(), request));
+
+		}
+
+		return ResponseEntity.ok().build();
+
 	}
 
 }
