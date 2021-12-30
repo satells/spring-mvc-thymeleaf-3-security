@@ -17,6 +17,7 @@ import com.asecurity.domain.Agendamento;
 import com.asecurity.domain.Horario;
 import com.asecurity.repository.AgendamentoRepository;
 import com.asecurity.repository.projection.HistoricoPaciente;
+import com.asecurity.security.exception.AcessoNegadoException;
 
 @Service
 public class AgendamentoService {
@@ -64,10 +65,16 @@ public class AgendamentoService {
 
 	@Transactional(readOnly = false)
 	public void editar(Agendamento agendamento, String email) {
-		Agendamento ag = buscarPorId(agendamento.getId());
+		Agendamento ag = buscarPorIdEUsuario(agendamento.getId(), email);
 		ag.setDataConsulta(agendamento.getDataConsulta());
 		ag.setEspecialidade(agendamento.getEspecialidade());
 		ag.setHorario(agendamento.getHorario());
 		ag.setMedico(agendamento.getMedico());
+	}
+
+	@Transactional(readOnly = true)
+	public Agendamento buscarPorIdEUsuario(Long id, String email) {
+		return repository.findByIdAndPacienteOrMedicoEmail(id, email)
+				.orElseThrow(() -> new AcessoNegadoException("Acesso negado ao usuário: " + email));
 	}
 }
