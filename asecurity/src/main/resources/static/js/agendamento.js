@@ -98,7 +98,8 @@ $(document).ready(function() {
             {data : 'paciente.nome'},
             {data: 'dataConsulta', render:
                 function( dataConsulta ) {
-                    return moment(dataConsulta).format('LLL');
+//                    return moment(dataConsulta).format('LLL');
+                    return dataConsulta;
                 }
             },
             {data : 'medico.nome'},

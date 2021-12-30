@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -92,4 +93,27 @@ public class AgendamentoController {
 
 	}
 
+	@GetMapping("/editar/consulta/{id}")
+	public String preEditarConsultaPaciente(@PathVariable("id") Long id, ModelMap model, @AuthenticationPrincipal User user) {
+
+		Agendamento agendamento = agendamentoService.buscarPorId(id);
+
+		model.addAttribute("agendamento", agendamento);
+
+		return "agendamento/cadastro";
+	}
+
+	@PostMapping("/editar")
+	public String editar(Agendamento agendamento, RedirectAttributes attr, @AuthenticationPrincipal User user) {
+		String titulo = agendamento.getEspecialidade().getTitulo();
+
+		Especialidade especialidade = especialidadeService.buscaPorTitulos(new String[] { titulo }).stream().findFirst().get();
+		agendamento.setEspecialidade(especialidade);
+
+		String email = user.getUsername();
+		agendamentoService.editar(agendamento, email);
+
+		attr.addFlashAttribute("sucesso", "Agendamento alterado com sucesso.");
+		return "redirect:/agendamentos/agendar";
+	}
 }

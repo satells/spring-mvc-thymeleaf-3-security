@@ -23,7 +23,7 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
 
 			+ "a.paciente as paciente, "
 
-			+ "concat(a.dataConsulta, a.horario.horaMinuto) as dataConsulta,"
+			+ "concat(function('TO_CHAR',a.dataConsulta,'DD/MM/YYYY'), ' - ', function('TO_CHAR', a.horario.horaMinuto,'HH:MI')) as dataConsulta,"
 
 			+ "a.medico as medico,"
 
@@ -33,5 +33,22 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Long> 
 
 			+ "where a.paciente.usuario.email like :email")
 	Page<HistoricoPaciente> findHistoricoByPacienteEmail(String email, Pageable pageable);
+
+	@Query("select "
+
+			+ "a.id as id,"
+
+			+ "a.paciente as paciente, "
+
+			+ "concat(function('TO_CHAR',a.dataConsulta,'DD/MM/YYYY'), ' - ', function('TO_CHAR', a.horario.horaMinuto,'HH:MI')) as dataConsulta,"
+
+			+ "a.medico as medico,"
+
+			+ "a.especialidade as especialidade"
+
+			+ " from Agendamento a "
+
+			+ "where a.medico.usuario.email like :email")
+	Page<HistoricoPaciente> findHistoricoByMedicoEmail(String email, Pageable pageable);
 
 }
