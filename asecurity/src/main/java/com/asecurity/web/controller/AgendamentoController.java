@@ -135,5 +135,4 @@ public class AgendamentoController {
 
 		return "redirect:/agendamentos/historico/paciente";
 	}
-
 }
