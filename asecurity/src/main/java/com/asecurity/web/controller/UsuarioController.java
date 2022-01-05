@@ -3,6 +3,7 @@ package com.asecurity.web.controller;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -165,7 +166,7 @@ public class UsuarioController {
 	}
 
 	@PostMapping("/cadastro/paciente/salvar")
-	public String savlarCadastroPaciente(Usuario usuario, BindingResult result) {
+	public String savlarCadastroPaciente(Usuario usuario, BindingResult result) throws MessagingException {
 
 		try {
 			usuarioService.salvarCadastroPaciente(usuario);

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 
 import com.asecurity.datatables.Datatables;
 import com.asecurity.datatables.DatatablesColunas;
@@ -23,6 +25,7 @@ import com.asecurity.domain.Perfil;
 import com.asecurity.domain.PerfilTipo;
 import com.asecurity.domain.Usuario;
 import com.asecurity.repository.UsuarioRepository;
+import com.asecurity.security.exception.AcessoNegadoException;
 
 @Service
 public class UsuarioService implements UserDetailsService {
@@ -31,6 +34,9 @@ public class UsuarioService implements UserDetailsService {
 
 	@Autowired
 	private UsuarioRepository repository;
+
+	@Autowired
+	private EmailService emailService;
 
 	@Transactional(readOnly = true)
 	public Usuario buscarPorEmail(String email) {
@@ -108,7 +114,7 @@ public class UsuarioService implements UserDetailsService {
 	}
 
 	@Transactional(readOnly = false)
-	public void salvarCadastroPaciente(Usuario usuario) {
+	public void salvarCadastroPaciente(Usuario usuario) throws MessagingException {
 		BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
 
 		String encoded = crypt.encode(usuario.getSenha());
@@ -116,12 +122,34 @@ public class UsuarioService implements UserDetailsService {
 		usuario.addPerfil(PerfilTipo.PACIENTE);
 
 		repository.save(usuario);
+
+		emailDeConfirmacaoDeCadastro(usuario.getEmail());
+
 	}
 
 	@Transactional(readOnly = true)
 	public Optional<Usuario> buscarPorEmailEAtivo(String email) {
 
 		return repository.findByEmailAndAtivo(email);
+
+	}
+
+	public void emailDeConfirmacaoDeCadastro(String email) throws MessagingException {
+		String codigo = Base64Utils.encodeToString(email.getBytes());
+		emailService.enviarPedidoDeConformacaoDeCadastro(email, codigo);
+
+	}
+
+	@Transactional(readOnly = true)
+	public void ativarCadastroPaciente(String codigo) {
+		String email = new String(Base64Utils.decode(codigo.getBytes()));
+		Usuario usuario = buscarPorEmail(email);
+
+		if (usuario.hasNotId()) {
+			throw new AcessoNegadoException("Não possível ativar seu cadastro.");
+		}
+
+		usuario.setAtivo(true);
 
 	}
 
