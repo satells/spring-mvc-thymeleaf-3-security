@@ -2,6 +2,7 @@ package com.asecurity.service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.asecurity.datatables.Datatables;
 import com.asecurity.datatables.DatatablesColunas;
 import com.asecurity.domain.Perfil;
+import com.asecurity.domain.PerfilTipo;
 import com.asecurity.domain.Usuario;
 import com.asecurity.repository.UsuarioRepository;
 
@@ -39,7 +41,7 @@ public class UsuarioService implements UserDetailsService {
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Usuario usuario = buscarPorEmail(username);
+		Usuario usuario = buscarPorEmailEAtivo(username).orElseThrow(() -> new UsernameNotFoundException("Usuário " + username + " não encontrado."));
 
 		return new User(
 
@@ -102,6 +104,24 @@ public class UsuarioService implements UserDetailsService {
 		usuario.setSenha(new BCryptPasswordEncoder().encode(senha));
 
 		repository.save(usuario);
+
+	}
+
+	@Transactional(readOnly = false)
+	public void salvarCadastroPaciente(Usuario usuario) {
+		BCryptPasswordEncoder crypt = new BCryptPasswordEncoder();
+
+		String encoded = crypt.encode(usuario.getSenha());
+		usuario.setSenha(encoded);
+		usuario.addPerfil(PerfilTipo.PACIENTE);
+
+		repository.save(usuario);
+	}
+
+	@Transactional(readOnly = true)
+	public Optional<Usuario> buscarPorEmailEAtivo(String email) {
+
+		return repository.findByEmailAndAtivo(email);
 
 	}
 
