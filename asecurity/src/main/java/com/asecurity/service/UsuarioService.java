@@ -7,6 +7,7 @@ import java.util.Optional;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.authority.AuthorityUtils;
@@ -37,12 +38,6 @@ public class UsuarioService implements UserDetailsService {
 
 	@Autowired
 	private EmailService emailService;
-
-	@Transactional(readOnly = true)
-	public Usuario buscarPorEmail(String email) {
-		return repository.findByEmail(email);
-
-	}
 
 	@Override
 	@Transactional(readOnly = true)
@@ -128,6 +123,12 @@ public class UsuarioService implements UserDetailsService {
 	}
 
 	@Transactional(readOnly = true)
+	public Usuario buscarPorEmail(String email) {
+		return repository.findByEmail(email);
+
+	}
+
+	@Transactional(readOnly = true)
 	public Optional<Usuario> buscarPorEmailEAtivo(String email) {
 
 		return repository.findByEmailAndAtivo(email);
@@ -140,7 +141,7 @@ public class UsuarioService implements UserDetailsService {
 
 	}
 
-	@Transactional(readOnly = true)
+	@Transactional(readOnly = false)
 	public void ativarCadastroPaciente(String codigo) {
 		String email = new String(Base64Utils.decode(codigo.getBytes()));
 		Usuario usuario = buscarPorEmail(email);
@@ -150,6 +151,18 @@ public class UsuarioService implements UserDetailsService {
 		}
 
 		usuario.setAtivo(true);
+
+	}
+
+	@Transactional(readOnly = false)
+	public void redefinicaoDeSenha(String email) throws MessagingException {
+		Usuario usuario = buscarPorEmailEAtivo(email).orElseThrow(() -> new UsernameNotFoundException("Usuário " + email + " não encontrado."));
+
+		String verificador = RandomStringUtils.randomAlphanumeric(6);
+
+		usuario.setCodigoVerificador(verificador);
+
+		emailService.enviarPedidoDeRedefinicaoDeSenha(email, verificador);
 
 	}
 

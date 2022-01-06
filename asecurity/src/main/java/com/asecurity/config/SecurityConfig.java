@@ -30,7 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 
 				.antMatchers("/", "/home", "/webjars/**", "/css/**", "/js/**", "/image/**", "/u/novo/cadastro", "/u/cadastro/realizado",
-						"/u/cadastro/paciente/salvar")
+						"/u/cadastro/paciente/salvar", "/u/confirmacao/cadastro", "/u/p/**")
 
 				.permitAll()
 
@@ -86,7 +86,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 				.exceptionHandling()
 
-				.accessDeniedPage("/acesso-negado");
+				.accessDeniedPage("/acesso-negado")
+
+				.and()
+
+				.rememberMe();
 
 	}
 
