@@ -1,12 +1,19 @@
 package com.asecurity.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
 
 import com.asecurity.domain.PerfilTipo;
 import com.asecurity.service.UsuarioService;
@@ -30,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 
 				.antMatchers("/", "/home", "/webjars/**", "/css/**", "/js/**", "/image/**", "/u/novo/cadastro", "/u/cadastro/realizado",
-						"/u/cadastro/paciente/salvar", "/u/confirmacao/cadastro", "/u/p/**")
+						"/u/cadastro/paciente/salvar", "/u/confirmacao/cadastro", "/u/p/**", "/expired")
 
 				.permitAll()
 
@@ -80,6 +87,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 				.logoutSuccessUrl("/")
 
+				.deleteCookies("JSESSIONID")
+
 				// @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 				.and()
@@ -92,10 +101,41 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 				.rememberMe();
 
+		http.sessionManagement().maximumSessions(1).expiredUrl("/expired").maxSessionsPreventsLogin(false).sessionRegistry(sessionRegistry());
+
+		http.sessionManagement().sessionFixation().newSession().sessionAuthenticationStrategy(sessionAuthenticationStrategy());
+
 	}
 
+	/**
+	 * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	 * Para bloquear o primeiro login
+	 */
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(usuarioService).passwordEncoder(new BCryptPasswordEncoder());
 	}
+
+	@Bean
+	public SessionRegistry sessionRegistry() {
+
+		return new SessionRegistryImpl();
+	}
+
+	@Bean
+	public ServletListenerRegistrationBean<?> servletListenerRegistrationBean() {
+
+		return new ServletListenerRegistrationBean<>(new HttpSessionEventPublisher());
+	}
+
+	/**
+	 * @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+	 * Para invalidar a sessão do primeiro login
+	 */
+
+	@Bean
+	public SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+		return new RegisterSessionAuthenticationStrategy(sessionRegistry());
+	}
+
 }
