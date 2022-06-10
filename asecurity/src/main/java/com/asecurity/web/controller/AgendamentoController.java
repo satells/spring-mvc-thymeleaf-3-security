@@ -46,7 +46,6 @@ public class AgendamentoController {
 	public String agendar(Agendamento agendamento) {
 
 		return "agendamento/cadastro";
-
 	}
 
 	@PreAuthorize("hasAnyAuthority('PACIENTE','MEDICO')")

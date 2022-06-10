@@ -25,14 +25,14 @@ public class EmailService {
 		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, "UTF-8");
 
 		Context context = new Context();
-		context.setVariable("Titulo", "Bem vindo à clínica Spring Scurity");
+		context.setVariable("Titulo", "Bem vindo à Spring Scurity");
 		context.setVariable("text", "Precisamos que confirme seu cadastro, clicando no link abaixo.");
 		context.setVariable("linkConfirmacao", "http://localhost:8080/u/confirmacao/cadastro?codigo=" + codigo);
 		String html = template.process("email/confirmacao", context);
 		helper.setTo(destino);
 		helper.setText(html, true);
 		helper.setSubject("Confirmção de cadastro");
-		helper.setFrom("nao-responder@hotmail.com");
+		helper.setFrom("mauro@");
 
 		helper.addInline("logo", new ClassPathResource("/static/image/spring-security.png"));
 
@@ -45,7 +45,7 @@ public class EmailService {
 		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, "UTF-8");
 
 		Context context = new Context();
-		context.setVariable("Titulo", "Bem vindo à clínica Spring Scurity");
+		context.setVariable("Titulo", "Bem vindo à Spring Scurity");
 		context.setVariable("text", "Precisamos que confirme seu cadastro, clicando no link abaixo.");
 
 		context.setVariable("verificador", verificador);
@@ -54,7 +54,7 @@ public class EmailService {
 		helper.setTo(destino);
 		helper.setText(html, true);
 		helper.setSubject("Redefinição de cadastro");
-		helper.setFrom("nao-responder@hotmail.com");
+		helper.setFrom("msergiost@");
 
 		helper.addInline("logo", new ClassPathResource("/static/image/spring-security.png"));
 

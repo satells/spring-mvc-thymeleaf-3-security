@@ -25,11 +25,10 @@ public class AsecurityApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		emailService.enviarPedidoDeConformacaoDeCadastro("msergiost@hotmail.com", "jrlçewqueiwaopnj789");
-
+//		emailService.enviarPedidoDeConformacaoDeCadastro("msergiost@", "jrlçewqueiwaopnj789");
 //		SimpleMailMessage mail = new SimpleMailMessage();
-//		mail.setFrom("emailchecktask@gmail.com");
-//		mail.setTo("msergiost@hotmail.com");
+//		mail.setFrom("mauro@");
+//		mail.setTo("msergiost@");
 //		mail.setText("tested,.........");
 //		mail.setSubject("teste 3");
 //
